@@ -1,1 +1,1 @@
-web: bin/mehm8128-study-server
+web: bin/mehm8128-study-server3
