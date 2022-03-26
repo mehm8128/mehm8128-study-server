@@ -3,9 +3,10 @@ package router
 import (
 	"net/http"
 
+	"mehm8128-study-server3/model"
+
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/mehm8128/mehm8128-study-server/model"
 )
 
 type Record struct {

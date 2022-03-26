@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/mehm8128/mehm8128-study-server/model"
-	"github.com/mehm8128/mehm8128-study-server/router"
+	"mehm8128-study-server3/model"
+
+	"mehm8128-study-server3/router"
 )
 
 func main() {
