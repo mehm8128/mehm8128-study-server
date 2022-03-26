@@ -1,0 +1,60 @@
+DROP DATABASE IF EXISTS mehm8128_study;
+CREATE DATABASE mehm8128_study;
+
+CREATE TABLE IF NOT EXISTS "users" (
+  "id" char(36) NOT NULL UNIQUE,
+  "name" varchar(20) NOT NULL,
+  "hashed_pass" varchar(200) NOT NULL UNIQUE,
+  "description" varchar(140) DEFAULT '',
+  "created_at" timestamp NOT NULL,
+  "updated_at" timestamp NOT NUll, 
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "goals" (
+  "id" char(36) NOT NULL UNIQUE,
+  "title" varchar(20) NOT NULL,
+  "comment" varchar(140) DEFAULT '',
+  "goal_date" char(10) NOT NULL,
+  "is_completed" boolean DEFAULT False,
+  "favorite_num" decimal(40) DEFAULT 0,
+  "created_by" char(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  "updated_at" timestamp NOT NUll, 
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("created_by") REFERENCES users("id")
+);
+
+CREATE TABLE IF NOT EXISTS "records" (
+  "id" char(36) NOT NULL UNIQUE,
+  "title" varchar(20) NOT NULL,
+  "page" decimal(3) DEFAULT 0,
+  "time" decimal(3) DEFAULT 0,
+  "comment" varchar(140) DEFAULT '',
+  "favorite_num" decimal(40) DEFAULT 0,
+  "created_by" char(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  "updated_at" timestamp NOT NUll, 
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("created_by") REFERENCES users("id")
+);
+
+CREATE TABLE IF NOT EXISTS "record_favorites" (
+  "id" char(36) NOT NULL UNIQUE,
+  "record_id" char(36) NOT NULL,
+  "created_by" char(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("record_id") REFERENCES records("id"),
+  FOREIGN KEY ("created_by") REFERENCES users("id")
+);
+
+CREATE TABLE IF NOT EXISTS "goal_favorites" (
+  "id" char(36) NOT NULL UNIQUE,
+  "goal_id" char(36) NOT NULL,
+  "created_by" char(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("goal_id") REFERENCES goals("id"),
+  FOREIGN KEY ("created_by") REFERENCES users("id")
+);

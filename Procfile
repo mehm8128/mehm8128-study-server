@@ -1,0 +1,1 @@
+web: bin/mehm8128-study-server

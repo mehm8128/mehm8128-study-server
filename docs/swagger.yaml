@@ -1,0 +1,549 @@
+openapi: 3.0.0
+servers:
+  - url: "/api"
+info:
+  version: "1.0.0"
+  title: mehm8128 app
+  description: mehm8128のアプリです
+paths:
+  /goals:
+    get:
+      summary: 目標一覧を取得する。
+      tags:
+        - Goals
+      responses:
+        "200":
+          description: 該当するものがない場合は空配列を返却。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Goal"
+        "400":
+          $ref: "#/components/responses/400"
+    post:
+      summary: 目標を新規作成する。
+      tags:
+        - Goals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostGoal"
+      responses:
+        "201":
+          description: 作成に成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+        "400":
+          $ref: "#/components/responses/400"
+
+  /goals/{goalID}:
+    parameters:
+      - name: goalID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定した目標の詳細を取得する。
+      tags:
+        - Goals
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+        "404":
+          $ref: "#/components/responses/404"
+    put:
+      summary: 指定した目標を修正する。
+      tags:
+        - Goals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostGoal"
+      responses:
+        "200":
+          description: 修正後のGoalを返却する。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+  /goals/user/{userID}:
+    parameters:
+      - name: userID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定したユーザーの目標一覧を取得する。
+      tags:
+        - Goals
+      responses:
+        "200":
+          description: 該当するものがない場合は空配列を返却。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Goal"
+        "400":
+          $ref: "#/components/responses/400"
+  /goals/favorite/{goalID}:
+    put:
+      summary: 指定した目標にふぁぼをつける。
+      tags:
+        - Goals
+      parameters:
+        - name: goalID
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoalFavorites"
+      responses:
+        "200":
+          description: 成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+        "400":
+          $ref: "#/components/responses/404"
+  /records:
+    get:
+      summary: 記録一覧を取得する。
+      tags:
+        - Records
+      responses:
+        "200":
+          description: 該当するものがない場合は空配列を返す。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+        "400":
+          $ref: "#/components/responses/400"
+    post:
+      summary: 記録を新規作成する。
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostRecord"
+      responses:
+        "201":
+          description: 作成に成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+
+        "400":
+          $ref: "#/components/responses/400"
+  /records/{recordID}:
+    parameters:
+      - name: recordID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定した記録の詳細を取得する。
+      tags:
+        - Records
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        "404":
+          $ref: "#/components/responses/404"
+    put:
+      summary: 指定した記録を修正する。
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostRecord"
+      responses:
+        "200":
+          description: 修正できた。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+  /records/user/{userID}:
+    parameters:
+      - name: userID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定したユーザーの記録一覧を取得する。
+      tags:
+        - Records
+      responses:
+        "200":
+          description: 該当するものがない場合は空配列を返却。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+        "400":
+          $ref: "#/components/responses/400"
+  /requests/{recordID}/favorite:
+    put:
+      summary: 指定した記録にふぁぼをつける。
+      tags:
+        - Records
+      parameters:
+        - name: recordID
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecordFavorites"
+      responses:
+        "200":
+          description: 成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+        "400":
+          $ref: "#/components/responses/404"
+  /users:
+    get:
+      tags:
+        - Users
+      summary: "ユーザー一覧を取得する。"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+
+  /users/me:
+    get:
+      tags:
+        - Users
+      summary: "自分の情報を取得する。"
+      responses:
+        "200":
+          description: "取得に成功した。返す"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+
+    put:
+      tags:
+        - Users
+      summary: "自分の情報を変更する。"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostUser"
+      responses:
+        "200":
+          description: "変更に成功した。"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+  /users/signup:
+    post:
+      tags:
+        - Users
+      summary: ユーザー登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: 不正なリクエスト
+  /users/login:
+    post:
+      tags:
+        - Users
+      summary: ログイン
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: 不正なリクエスト
+        "403":
+          description: パスワードが不一致
+        "404":
+          description: ユーザーが見つからない
+components:
+  schemas:
+    Goal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "シス単"
+        comment:
+          type: string
+          example: "頑張ります"
+        goalDate:
+          type: string
+          example: "2022-04-28"
+        isCompleted:
+          type: boolean
+          example: true
+        favorites:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoalFavorites"
+        favoriteNum:
+          type: integer
+          example: 5
+        createdBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PostGoal:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "シス単"
+        comment:
+          type: string
+          example: "頑張ります"
+        goalDate:
+          type: string
+          example: "2022-04-28"
+        isCompleted:
+          type: boolean
+          example: true
+        createdBy:
+          type: string
+          format: uuid
+    Record:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "シス単"
+        page:
+          type: integer
+          example: 4
+        time:
+          type: integer
+          example: 45
+        comment:
+          type: string
+          example: "疲れた"
+        favorites:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecordFavorites"
+        favoriteNum:
+          type: integer
+          example: 5
+        createdBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PostRecord:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "シス単"
+        page:
+          type: integer
+          example: 4
+        time:
+          type: integer
+          example: 45
+        comment:
+          type: string
+          example: "疲れた"
+        createdBy:
+          type: string
+          format: uuid
+    RecordFavorites:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: "date-time"
+        recordId:
+          type: string
+          format: uuid
+    GoalFavorites:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: "date-time"
+        goalId:
+          type: string
+          format: uuid
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "mehm8128"
+        description:
+          type: string
+          example: "よろしくお願いします"
+        createdAt:
+          type: string
+          format: "date-time"
+        updatedAt:
+          type: string
+          format: "date-time"
+    PostUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "mehm8128"
+        description:
+          type: string
+          example: "よろしくお願いします"
+    LoginRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "mehm8128"
+        password:
+          type: string
+          example: "math8128"
+    LoginResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "mehm8128"
+  responses:
+    400:
+      description: 不正なリクエスト。
+    404:
+      description: 指定したリソースは存在しない。
