@@ -97,6 +97,21 @@ func putRecord(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusOK)
 }
 
+func deleteRecord(c echo.Context) error {
+	ID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
+	}
+	ctx := c.Request().Context()
+	err = model.DeleteRecordFavorites(ctx, ID)
+	err = model.DeleteRecord(ctx, ID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return echo.NewHTTPError(http.StatusOK)
+}
+
 func getRecordsByUser(c echo.Context) error {
 	ID, err := uuid.Parse(c.Param("id"))
 	if err != nil {

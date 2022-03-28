@@ -37,3 +37,19 @@ func GetGoalFavorites(ctx context.Context, id uuid.UUID) ([]GoalFavoriteResponse
 	}
 	return favorites, nil
 }
+
+func DeleteRecordFavorites(ctx context.Context, id uuid.UUID) error {
+	_, err := db.ExecContext(ctx, "DELETE FROM record_favorites WHERE record_id = $1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteGoalFavorites(ctx context.Context, id uuid.UUID) error {
+	_, err := db.ExecContext(ctx, "DELETE FROM goal_favorites WHERE goal_id = $1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

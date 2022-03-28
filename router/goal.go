@@ -97,6 +97,21 @@ func putGoal(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusOK)
 }
 
+func deleteGoal(c echo.Context) error {
+	ID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
+	}
+	ctx := c.Request().Context()
+	err = model.DeleteGoalFavorites(ctx, ID)
+	err = model.DeleteGoal(ctx, ID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return echo.NewHTTPError(http.StatusOK)
+}
+
 func getGoalsByUser(c echo.Context) error {
 	ID, err := uuid.Parse(c.Param("id"))
 	if err != nil {

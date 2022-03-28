@@ -70,6 +70,14 @@ func PutGoal(ctx context.Context, id uuid.UUID, title string, comment string, go
 	return nil
 }
 
+func DeleteGoal(ctx context.Context, id uuid.UUID) error {
+	_, err := db.ExecContext(ctx, "DELETE FROM goals WHERE id=$1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetGoalsByUser(ctx context.Context, id uuid.UUID) ([]*GoalResponse, error) {
 	var goals []*GoalResponse
 	err := db.SelectContext(ctx, &goals, "SELECT * FROM goals WHERE created_by = $1 ORDER BY created_at DESC", id)

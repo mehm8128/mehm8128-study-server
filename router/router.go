@@ -2,7 +2,6 @@ package router
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -10,7 +9,7 @@ import (
 
 func SetRouting() {
 	e := echo.New()
-	port := os.Getenv("PORT")
+	//port := os.Getenv("PORT")
 	e.Use(middleware.Logger())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -41,6 +40,7 @@ func SetRouting() {
 			apiGoals.POST("", postGoal)
 			apiGoals.GET("/:id", getGoal)
 			apiGoals.PUT("/:id", putGoal)
+			apiGoals.DELETE("/:id", deleteGoal)
 			apiGoals.GET("/user/:id", getGoalsByUser)
 			apiGoals.PUT("/favorite/:id", putGoalFavorite)
 		}
@@ -50,9 +50,10 @@ func SetRouting() {
 			apiRecords.POST("", postRecord)
 			apiRecords.GET("/:id", getRecord)
 			apiRecords.PUT("/:id", putRecord)
+			apiRecords.DELETE("/:id", deleteRecord)
 			apiRecords.GET("/user/:id", getRecordsByUser)
 			apiRecords.PUT("/favorite/:id", PutRecordFavorite)
 		}
 	}
-	e.Logger.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + "8000"))
 }

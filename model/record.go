@@ -70,6 +70,14 @@ func PutRecord(ctx context.Context, id uuid.UUID, title string, page int, timeRe
 	return nil
 }
 
+func DeleteRecord(ctx context.Context, id uuid.UUID) error {
+	_, err := db.ExecContext(ctx, "DELETE FROM records WHERE id=$1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetRecordsByUser(ctx context.Context, id uuid.UUID) ([]*RecordResponse, error) {
 	var records []*RecordResponse
 	err := db.SelectContext(ctx, &records, "SELECT * FROM records WHERE created_by = $1 ORDER BY created_at DESC", id)
