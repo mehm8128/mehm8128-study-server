@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -9,7 +10,7 @@ import (
 
 func SetRouting() {
 	e := echo.New()
-	//port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 	e.Use(middleware.Logger())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -62,5 +63,5 @@ func SetRouting() {
 			apiMemorize.POST("/:id/words", postWord)
 		}
 	}
-	e.Logger.Fatal(e.Start(":" + "8000"))
+	e.Logger.Fatal(e.Start(":" + port))
 }
