@@ -66,6 +66,9 @@ func getRecord(c echo.Context) error {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
+	if record == nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "record not found")
+	}
 	favorites, err := model.GetRecordFavorites(ctx, ID)
 	if err != nil {
 		c.Logger().Error(err)
@@ -75,9 +78,6 @@ func getRecord(c echo.Context) error {
 		favorites = []model.RecordFavoriteResponse{}
 	}
 	record.Favorites = favorites
-	if record == nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "record not found")
-	}
 	return echo.NewHTTPError(http.StatusOK, record)
 }
 

@@ -66,6 +66,9 @@ func getGoal(c echo.Context) error {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
+	if goal == nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "goal not found")
+	}
 	favorites, err := model.GetGoalFavorites(ctx, goal.ID)
 	if err != nil {
 		c.Logger().Error(err)
@@ -75,9 +78,6 @@ func getGoal(c echo.Context) error {
 		favorites = []model.GoalFavoriteResponse{}
 	}
 	goal.Favorites = favorites
-	if goal == nil {
-		return echo.NewHTTPError(http.StatusOK, model.GoalResponse{})
-	}
 	return echo.NewHTTPError(http.StatusOK, goal)
 }
 

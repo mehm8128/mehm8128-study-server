@@ -1,5 +1,8 @@
+/*
 DROP DATABASE IF EXISTS mehm8128_study;
 CREATE DATABASE mehm8128_study;
+\i ./sql/initDB.sql
+*/
 
 CREATE TABLE IF NOT EXISTS "users" (
   "id" char(36) NOT NULL UNIQUE,
@@ -57,4 +60,22 @@ CREATE TABLE IF NOT EXISTS "goal_favorites" (
   PRIMARY KEY ("id"),
   FOREIGN KEY ("goal_id") REFERENCES goals("id"),
   FOREIGN KEY ("created_by") REFERENCES users("id")
+);
+
+CREATE TABLE IF NOT EXISTS "memorizes" (
+  "id" char(36) NOT NULL UNIQUE,
+  "name" varchar(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  "updated_at" timestamp NOT NULL,
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "words" (
+  "id" char(36) NOT NULL UNIQUE,
+  "memorize_id" char(36) NOT NULL,
+  "word" varchar(36) NOT NULL,
+  "word_jp" varchar(36) NOT NULL,
+  "created_at" timestamp NOT NULL,
+  PRIMARY KEY ("id"),
+  FOREIGN KEY ("memorize_id") REFERENCES memorizes("id")
 );
