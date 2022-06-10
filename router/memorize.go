@@ -1,9 +1,8 @@
 package router
 
 import (
+	"mehm8128_study_server/model"
 	"net/http"
-
-	"mehm8128-study-server3/model"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"

@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-
-	"mehm8128-study-server3/model"
-
-	"mehm8128-study-server3/router"
+	"mehm8128_study_server/model"
+	"mehm8128_study_server/router"
 )
 
 func main() {

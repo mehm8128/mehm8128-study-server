@@ -9,15 +9,26 @@ import (
 )
 
 func SetRouting() {
-	e := echo.New()
 	port := os.Getenv("PORT")
+	//port := "8000"
+
+	// store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("secret-key"))
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	e := echo.New()
 	e.Use(middleware.Logger())
+	//e.Use(session.Middleware(store))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"http://localhost:3000", "https://mehm8128-study-client.vercel.app"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
+	//defer store.Close()
+	//defer store.StopCleanup(store.Cleanup(time.Minute * 5))
+
 	api := e.Group("/api")
 	{
 		apiPing := api.Group("/ping")
