@@ -31,7 +31,10 @@ func getMemorizes(c echo.Context) error {
 
 func postMemorize(c echo.Context) error {
 	var memorize Memorize
-	c.Bind(&memorize)
+	err := c.Bind(&memorize)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	//todo:権限チェック
 	res, err := model.CreateMemorize(ctx, memorize.Name)
@@ -69,7 +72,10 @@ func getMemorize(c echo.Context) error {
 
 func postWord(c echo.Context) error {
 	var word Word
-	c.Bind(&word)
+	err := c.Bind(&word)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")

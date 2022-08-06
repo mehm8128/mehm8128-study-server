@@ -32,7 +32,10 @@ type PutMe struct {
 
 func postSignUp(c echo.Context) error {
 	var req SignUpRequest
-	c.Bind(&req)
+	err := c.Bind(&req)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	if req.Name == "" || req.Password == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "name or password is empty")
 	}
@@ -63,7 +66,10 @@ func postSignUp(c echo.Context) error {
 
 func postLogin(c echo.Context) error {
 	var req LoginRequest
-	c.Bind(&req)
+	err := c.Bind(&req)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	if req.Name == "" || req.Password == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "name or password is empty")
 	}
@@ -98,6 +104,7 @@ func postLogout(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed in getting session")
 	}
 	sess.Options.MaxAge = -1
+	sess.Values["userID"] = ""
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
 		return fmt.Errorf("Failed to delete session: %w", err)
@@ -146,6 +153,9 @@ func getMe(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in getting session")
 	}
 	userID := sess.Values["userID"]
+	if userID == nil {
+		return echo.NewHTTPError(http.StatusForbidden, "not logged in")
+	}
 	ctx := c.Request().Context()
 	ID, err := uuid.Parse(userID.(string))
 	if err != nil {

@@ -45,7 +45,10 @@ func getRecords(c echo.Context) error {
 
 func postRecord(c echo.Context) error {
 	var record Record
-	c.Bind(&record)
+	err := c.Bind(&record)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	res, err := model.CreateRecord(ctx, record.Title, record.Page, record.Time, record.Comment, record.CreatedBy)
 	if err != nil {
@@ -86,7 +89,10 @@ func putRecord(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
 	}
 	var record Record
-	c.Bind(&record)
+	err = c.Bind(&record)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	err = model.PutRecord(ctx, ID, record.Title, record.Page, record.Time, record.Comment)
 	if err != nil {
@@ -138,7 +144,10 @@ func PutRecordFavorite(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
 	}
 	var favorite RecordFavorite
-	c.Bind(&favorite)
+	err = c.Bind(&favorite)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	res, err := model.PutRecordFavorite(ctx, ID, favorite.CreatedBy)
 	if err != nil {

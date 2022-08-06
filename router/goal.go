@@ -45,7 +45,10 @@ func getGoals(c echo.Context) error {
 
 func postGoal(c echo.Context) error {
 	var goal Goal
-	c.Bind(&goal)
+	err := c.Bind(&goal)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	res, err := model.CreateGoal(ctx, goal.Title, goal.Comment, goal.GoalDate, goal.CreatedBy)
 	if err != nil {
@@ -86,7 +89,10 @@ func putGoal(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
 	}
 	var goal Goal
-	c.Bind(&goal)
+	err = c.Bind(&goal)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	err = model.PutGoal(ctx, ID, goal.Title, goal.Comment, goal.GoalDate, goal.IsCompleted)
 	if err != nil {
@@ -103,6 +109,10 @@ func deleteGoal(c echo.Context) error {
 	}
 	ctx := c.Request().Context()
 	err = model.DeleteGoalFavorites(ctx, ID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
 	err = model.DeleteGoal(ctx, ID)
 	if err != nil {
 		c.Logger().Error(err)
@@ -134,7 +144,10 @@ func putGoalFavorite(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
 	}
 	var favorite GoalFavorite
-	c.Bind(&favorite)
+	err = c.Bind(&favorite)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
+	}
 	ctx := c.Request().Context()
 	res, err := model.PutGoalFavorite(ctx, ID, favorite.CreatedBy)
 	if err != nil {

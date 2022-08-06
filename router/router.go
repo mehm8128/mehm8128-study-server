@@ -14,7 +14,8 @@ import (
 func SetRouting() {
 	port := os.Getenv("PORT")
 	//port := "8000"
-	store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("sessions"))
+	//store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("sessions"))
+	store, err := pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte("sessions"))
 	if err != nil {
 		panic(err)
 	}
