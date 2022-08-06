@@ -88,6 +88,7 @@ func postLogin(c echo.Context) error {
 	}
 	sess.Values["userID"] = user.ID.String()
 	sess.Options.SameSite = http.SameSiteNoneMode
+	sess.Options.Secure = true
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in saving session")
