@@ -87,11 +87,11 @@ func postLogin(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in getting session")
 	}
 	sess.Values["userID"] = user.ID.String()
+	sess.Options.SameSite = http.SameSiteNoneMode
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in saving session")
 	}
-	sess.Options.SameSite = http.SameSiteNoneMode
 	res := LoginResponse{
 		ID:   user.ID,
 		Name: user.Name,
