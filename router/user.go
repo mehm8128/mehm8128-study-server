@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -92,10 +91,7 @@ func postLogin(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in saving session")
 	}
-	sess.Options = &sessions.Options{
-		Secure:   true,
-		SameSite: http.SameSiteNoneMode,
-	}
+	sess.Options.SameSite = http.SameSiteNoneMode
 	res := LoginResponse{
 		ID:   user.ID,
 		Name: user.Name,
