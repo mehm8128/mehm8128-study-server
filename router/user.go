@@ -91,6 +91,11 @@ func postLogin(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "something wrong in saving session")
 	}
+	cookie := &http.Cookie{
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	}
+	c.SetCookie(cookie)
 	res := LoginResponse{
 		ID:   user.ID,
 		Name: user.Name,
