@@ -67,3 +67,13 @@ func GetUser(ctx context.Context, ID uuid.UUID) (*UserResponse, error) {
 	}
 	return &user, nil
 }
+
+func PutMe(ctx context.Context, ID uuid.UUID, name string, description string) (*UserResponse, error) {
+	var user UserResponse
+	date := time.Now()
+	_, err := db.Exec("UPDATE users SET name = $1, description = $2, updated_at = $3 WHERE id = $4", name, description, date, ID)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

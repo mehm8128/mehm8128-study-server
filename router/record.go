@@ -103,6 +103,10 @@ func deleteRecord(c echo.Context) error {
 	}
 	ctx := c.Request().Context()
 	err = model.DeleteRecordFavorites(ctx, ID)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
 	err = model.DeleteRecord(ctx, ID)
 	if err != nil {
 		c.Logger().Error(err)

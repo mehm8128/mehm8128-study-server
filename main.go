@@ -7,10 +7,9 @@ import (
 )
 
 func main() {
-	db, err := model.InitDB()
+	_, err := model.InitDB()
 	if err != nil {
 		panic(fmt.Errorf("DB Error: %w", err))
 	}
-	fmt.Println(db) //todo:あとでセッション関連でdbを使う
 	router.SetRouting()
 }

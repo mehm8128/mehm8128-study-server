@@ -3,7 +3,10 @@ package router
 import (
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/antonlindstrom/pgstore"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -11,23 +14,22 @@ import (
 func SetRouting() {
 	port := os.Getenv("PORT")
 	//port := "8000"
-
-	// store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("secret-key"))
-	// if err != nil {
-	// 	panic(err)
-	// }
+	store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("sessions"))
+	if err != nil {
+		panic(err)
+	}
 
 	e := echo.New()
 	e.Use(middleware.Logger())
-	//e.Use(session.Middleware(store))
+	e.Use(session.Middleware(store))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"http://localhost:3000", "https://mehm8128-study-client.vercel.app"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
-	//defer store.Close()
-	//defer store.StopCleanup(store.Cleanup(time.Minute * 5))
+	defer store.Close()
+	defer store.StopCleanup(store.Cleanup(time.Minute * 5))
 
 	api := e.Group("/api")
 	{
@@ -41,10 +43,11 @@ func SetRouting() {
 		{
 			apiUsers.POST("/signup", postSignUp)
 			apiUsers.POST("/login", postLogin)
+			apiUsers.POST("/logout", postLogout)
 			apiUsers.GET("", getUsers)
+			apiUsers.GET("/me", getMe)
 			apiUsers.GET("/:id", getUser)
-			//todo:セッションから取るので後回しapiUsers.GET("/me", getMe)
-			//todo:セッションから取るので後回しapiUsers.PUT("/me", putMe)
+			apiUsers.PUT("/me", putMe)
 		}
 		apiGoals := api.Group("/goals")
 		{
