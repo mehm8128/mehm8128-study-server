@@ -116,15 +116,19 @@ func getQuiz(c echo.Context) error {
 	var quiz []*QuizResponse
 	for i := 0; i < len(words); i++ {
 		//答えと選択肢、選択肢どうしが重複しないように選択肢を作る
-		var numbers []int
-		for j := 0; j < 4; j++ {
-			numbers = append(numbers, rand.Intn(len(words)))
-			//todo:選択肢どうしで重複しないようにする
+		//ランダムな配列から前4つを選んで重複しないランダムな数値を取得できる
+		randomNumbers := make([]int, 0, len(words))
+		for j := 0; j < len(words); j++ {
+			randomNumbers = append(randomNumbers, j)
 		}
-		for j := 0; j < len(numbers); j++ {
-			if numbers[j] == i {
-				numbers[j] = (numbers[j] + 1) % len(words)
+		//答えと重複するものは別のものに変える
+		var numbers []int
+		for j := 0; j < len(words); j++ {
+			if j == i {
+				numbers = append(numbers, randomNumbers[4])
+				continue
 			}
+			numbers = append(numbers, randomNumbers[j])
 		}
 		quiz = append(quiz, &QuizResponse{
 			Answer:  words[i],
