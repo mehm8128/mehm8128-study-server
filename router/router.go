@@ -76,6 +76,7 @@ func SetRouting() {
 			apiMemorize.POST("", postMemorize)
 			apiMemorize.GET("/:id", getMemorize)
 			apiMemorize.POST("/:id/words", postWord)
+			apiMemorize.GET("/:id/quiz", getQuiz)
 		}
 	}
 	e.Logger.Fatal(e.Start(":" + port))
