@@ -17,8 +17,8 @@ type Word struct {
 	WordJp string `json:"wordJp" db:"word_jp"`
 }
 type QuizResponse struct {
-	Answer     model.WordResponse   `json:"answer" db:"answer"`
-	Selections []model.WordResponse `json:"selection" db:"selection"`
+	Answer  model.WordResponse   `json:"answer" db:"answer"`
+	Choices []model.WordResponse `json:"choices" db:"choices"`
 }
 
 func getMemorizes(c echo.Context) error {
@@ -127,12 +127,12 @@ func getQuiz(c echo.Context) error {
 			}
 		}
 		quiz = append(quiz, &QuizResponse{
-			Answer:     words[i],
-			Selections: []model.WordResponse{words[numbers[0]], words[numbers[1]], words[numbers[2]], words[numbers[3]]},
+			Answer:  words[i],
+			Choices: []model.WordResponse{words[numbers[0]], words[numbers[1]], words[numbers[2]], words[numbers[3]]},
 		})
 		//答えの選択肢だけすり替え
 		answerNumber := rand.Intn(4)
-		quiz[i].Selections[answerNumber] = words[i]
+		quiz[i].Choices[answerNumber] = words[i]
 	}
 
 	return echo.NewHTTPError(http.StatusOK, quiz)
