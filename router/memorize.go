@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"math/rand"
 	"mehm8128_study_server/model"
 	"net/http"
@@ -123,15 +122,14 @@ func getQuiz(c echo.Context) error {
 			randomNumbers = append(randomNumbers, j)
 		}
 		//配列をシャッフル
-		for j := 0; j < len(words); j++ {
-			k := rand.Intn(len(words))
-			fmt.Printf("%v", k)
-			words[j], words[k] = words[k], words[j]
+		for j := 0; j < len(randomNumbers); j++ {
+			k := rand.Intn(len(randomNumbers))
+			randomNumbers[j], randomNumbers[k] = randomNumbers[k], randomNumbers[j]
 		}
 		//答えと重複するものは別のものに変える
 		var numbers []int
-		for j := 0; j < len(words); j++ {
-			if j == i {
+		for j := 0; j < 4; j++ {
+			if randomNumbers[j] == i {
 				numbers = append(numbers, randomNumbers[4])
 				continue
 			}
