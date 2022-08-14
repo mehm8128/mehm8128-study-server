@@ -78,6 +78,12 @@ func SetRouting() {
 			apiMemorize.POST("/:id/words", postWord)
 			apiMemorize.GET("/:id/quiz", getQuiz)
 		}
+		apiFiles := api.Group("/files")
+		{
+			apiFiles.POST("", postFile)
+			//apiFiles.GET("", getFile)
+			apiFiles.GET("/:id/info", getFileInfo)
+		}
 	}
 	e.Logger.Fatal(e.Start(":" + port))
 }
