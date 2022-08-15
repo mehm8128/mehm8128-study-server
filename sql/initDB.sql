@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS "words" (
 
 CREATE TABLE IF NOT EXISTS "files" (
   "id" char(36) NOT NULL UNIQUE,
-  "file_name" char(36) NOT NULL,
+  "file_name" varchar(36) NOT NULL,
   "created_by" char(36) NOT NULL,
   "created_at" timestamp NOT NULL,
   PRIMARY KEY ("id")

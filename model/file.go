@@ -14,8 +14,7 @@ type FileResponse struct {
 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
 }
 
-func CreateFile(ctx context.Context, ID uuid.UUID, fileName string, createdBy uuid.UUID) (*FileResponse, error) {
-	fileID := uuid.New()
+func CreateFile(ctx context.Context, fileID uuid.UUID, fileName string, createdBy uuid.UUID) (*FileResponse, error) {
 	date := time.Now()
 	_, err := db.ExecContext(ctx, "INSERT INTO files (id, file_name, created_by, created_at) VALUES ($1, $2, $3, $4)", fileID, fileName, createdBy, date)
 	if err != nil {

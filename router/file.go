@@ -54,6 +54,26 @@ func postFile(c echo.Context) error {
 	return echo.NewHTTPError(http.StatusOK, &res)
 }
 
+func getFile(c echo.Context) error {
+	ID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid id")
+	}
+	ctx := c.Request().Context()
+	file, err := model.GetFile(ctx, ID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	extension := strings.Split(file.FileName, ".")[1]
+	filePath := "./files/" + file.ID.String() + "." + extension
+	src, err := os.Open(filePath)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	defer src.Close()
+	return c.Stream(http.StatusOK, "image/"+extension, src)
+}
+
 func getFileInfo(c echo.Context) error {
 	ID, err := uuid.Parse(c.Param("id"))
 	if err != nil {

@@ -81,7 +81,7 @@ func SetRouting() {
 		apiFiles := api.Group("/files")
 		{
 			apiFiles.POST("", postFile)
-			//apiFiles.GET("", getFile)
+			apiFiles.GET("/:id", getFile)
 			apiFiles.GET("/:id/info", getFileInfo)
 		}
 	}
