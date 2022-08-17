@@ -378,6 +378,104 @@ paths:
       responses:
         "200":
           description: OK
+  /memorizes:
+    get:
+      summary: 暗記物一覧を取得する。
+      tags:
+        - Memorizes
+      responses:
+        "200":
+          description: 該当するものがない場合は空配列を返す。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Memorize"
+        "400":
+          $ref: "#/components/responses/400"
+    post:
+      summary: 暗記物を新規作成する。
+      tags:
+        - Memorizes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostMemorize"
+      responses:
+        "201":
+          description: 作成に成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Memorize"
+        "400":
+          $ref: "#/components/responses/400"
+  /memorizes/{memorizeID}:
+    parameters:
+      - name: memorizeID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定した暗記物の詳細を取得する。
+      tags:
+        - Memorizes
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Memorize"
+        "404":
+          $ref: "#/components/responses/404"
+  /memorizes/{memorizeID}/words:
+    parameters:
+      - name: memorizeID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: 指定した暗記物に単語を追加する。
+      tags:
+        - Memorizes
+      responses:
+        "201":
+          description: 作成に成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Word"
+        "400":
+          $ref: "#/components/responses/400"
+  /memorizes/{memorizeID}/quiz:
+    parameters:
+      - name: memorizeID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定した暗記物のクイズを取得する。
+      tags:
+        - Memorizes
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+        "404":
+          $ref: "#/components/responses/404"
 components:
   schemas:
     Goal:
@@ -562,6 +660,67 @@ components:
         name:
           type: string
           example: "mehm8128"
+    Memorize:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "シス単"
+        words:
+          type: array
+          items:
+            $ref: "#/components/schemas/Word"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PostMemorize:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "シス単"
+    PostWord:
+      type: object
+      properties:
+        word:
+          type: string
+          example: "apple"
+        wordJp:
+          type: string
+          example: "りんご"
+    Word:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        memorizeId:
+          type: string
+          format: uuid
+        word:
+          type: string
+          example: "apple"
+        wordJp:
+          type: string
+          example: "りんご"
+        createdAt:
+          type: string
+          format: date-time
+    Quiz:
+      type: object
+      properties:
+        answer:
+          $ref: "#/components/schemas/Word"
+        choices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Word"
   responses:
     400:
       description: 不正なリクエスト。
