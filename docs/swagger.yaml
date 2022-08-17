@@ -476,6 +476,63 @@ paths:
                 $ref: "#/components/schemas/Quiz"
         "404":
           $ref: "#/components/responses/404"
+  /files:
+    post:
+      summary: ファイルを登録する。
+      tags:
+        - Files
+      responses:
+        "201":
+          description: 作成に成功。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/File"
+        "400":
+          $ref: "#/components/responses/400"
+  /files/{fileID}:
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定したファイルを取得する。
+      tags:
+        - Files
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: "#/components/responses/404"
+  /files/{fileID}/info:
+    parameters:
+      - name: fileID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: 指定したファイルを取得する。
+      tags:
+        - Files
+      responses:
+        "200":
+          description: あったら返す。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/File"
+        "404":
+          $ref: "#/components/responses/404"
 components:
   schemas:
     Goal:
@@ -721,6 +778,21 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Word"
+    File:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+          example: "test.png"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
   responses:
     400:
       description: 不正なリクエスト。
