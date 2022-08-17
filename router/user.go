@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"mehm8128_study_server/model"
 	"net/http"
 
@@ -108,9 +107,6 @@ func postLogout(c echo.Context) error {
 	sess.Options.MaxAge = -1
 	sess.Values["userID"] = ""
 	err = sess.Save(c.Request(), c.Response())
-	if err != nil {
-		return fmt.Errorf("Failed to delete session: %w", err)
-	}
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
