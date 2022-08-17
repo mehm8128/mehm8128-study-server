@@ -279,7 +279,20 @@ paths:
                   $ref: "#/components/schemas/User"
         "400":
           $ref: "#/components/responses/400"
-
+  /users/{userID}:
+    get:
+      tags:
+        - Users
+      summary: "ユーザーの情報を取得する。"
+      responses:
+        "200":
+          description: "取得に成功した。返す"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
   /users/me:
     get:
       tags:
@@ -294,7 +307,6 @@ paths:
                 $ref: "#/components/schemas/User"
         "400":
           $ref: "#/components/responses/400"
-
     put:
       tags:
         - Users
@@ -333,7 +345,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
         "400":
-          description: 不正なリクエスト
+          description: "#/components/responses/400"
   /users/login:
     post:
       tags:
@@ -353,11 +365,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
         "400":
-          description: 不正なリクエスト
+          description: "#/components/responses/400"
         "403":
           description: パスワードが不一致
         "404":
           description: ユーザーが見つからない
+  /users/logout:
+    post:
+      tags:
+        - Users
+      summary: ログアウト
+      responses:
+        "200":
+          description: OK
 components:
   schemas:
     Goal:
