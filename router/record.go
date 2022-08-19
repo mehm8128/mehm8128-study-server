@@ -13,6 +13,7 @@ type Record struct {
 	Page      int       `json:"page" db:"page"`
 	Time      int       `json:"time" db:"time"`
 	Comment   string    `json:"comment" db:"comment"`
+	FileID    uuid.UUID `json:"fileId" db:"file_id"`
 	CreatedBy uuid.UUID `json:"createdBy" db:"created_by"`
 }
 type RecordFavorite struct {
@@ -50,7 +51,7 @@ func postRecord(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
 	}
 	ctx := c.Request().Context()
-	res, err := model.CreateRecord(ctx, record.Title, record.Page, record.Time, record.Comment, record.CreatedBy)
+	res, err := model.CreateRecord(ctx, record.Title, record.Page, record.Time, record.Comment, record.FileID, record.CreatedBy)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
@@ -94,7 +95,7 @@ func putRecord(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
 	}
 	ctx := c.Request().Context()
-	err = model.PutRecord(ctx, ID, record.Title, record.Page, record.Time, record.Comment)
+	err = model.PutRecord(ctx, ID, record.Title, record.Page, record.Time, record.Comment, record.FileID)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
