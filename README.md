@@ -1,4 +1,4 @@
-# mehm8128_study_server
+# mehm8128-study-server
 勉強記録管理用アプリのサーバーです(制作中)。
 
 クライアント：https://github.com/mehm8128/mehm8128-study-client
