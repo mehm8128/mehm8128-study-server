@@ -25,7 +25,7 @@ func SetRouting() {
 	e.Use(session.Middleware(store))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://localhost:3000", "https://mehm8128-study-client.vercel.app"},
+		AllowOrigins:     []string{"*"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
