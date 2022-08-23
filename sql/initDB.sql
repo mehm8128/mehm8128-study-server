@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS "records" (
   "time" decimal(3) DEFAULT 0,
   "comment" varchar(140) DEFAULT '',
   "favorite_num" decimal(40) DEFAULT 0,
-  "file_id" char(36) NOT NULL,
+  "file_id" char(36),
   "created_by" char(36) NOT NULL,
   "created_at" timestamp NOT NULL,
   "updated_at" timestamp NOT NUll,
