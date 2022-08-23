@@ -34,9 +34,20 @@ func CreateRecord(ctx context.Context, title string, page int, timeRecord int, c
 	recordID := uuid.New()
 	date := time.Now()
 	var favorites []RecordFavoriteResponse
-	_, err := db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, file_id, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", recordID, title, page, timeRecord, comment, 0, fileID, createdBy, date, date)
+	zeroUuid, err := uuid.Parse("00000000-0000-0000-0000-000000000000")
 	if err != nil {
 		return nil, err
+	}
+	if fileID == zeroUuid {
+		_, err = db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", recordID, title, page, timeRecord, comment, 0, createdBy, date, date)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		_, err = db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, file_id, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", recordID, title, page, timeRecord, comment, 0, fileID, createdBy, date, date)
+		if err != nil {
+			return nil, err
+		}
 	}
 	record := &RecordResponse{
 		ID:          recordID,

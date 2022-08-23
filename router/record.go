@@ -13,7 +13,7 @@ type Record struct {
 	Page      int       `json:"page" db:"page"`
 	Time      int       `json:"time" db:"time"`
 	Comment   string    `json:"comment" db:"comment"`
-	FileID    uuid.UUID `json:"fileId" db:"file_id"`
+	FileID    uuid.UUID `json:"fileId,omitempty" db:"file_id"`
 	CreatedBy uuid.UUID `json:"createdBy" db:"created_by"`
 }
 type RecordFavorite struct {
