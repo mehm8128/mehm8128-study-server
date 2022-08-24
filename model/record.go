@@ -73,9 +73,16 @@ func GetRecord(ctx context.Context, id uuid.UUID) (*RecordResponse, error) {
 
 func PutRecord(ctx context.Context, id uuid.UUID, title string, page int, timeRecord int, comment string, fileID uuid.UUID) error {
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "UPDATE records SET title=$1, page=$2, time=$3, comment=$4, file_id=$5, updated_at=$6 WHERE id=$7", title, page, timeRecord, comment, fileID, date, id)
-	if err != nil {
-		return err
+	if fileID == uuid.Nil {
+		_, err := db.ExecContext(ctx, "UPDATE records SET title=$1, page=$2, time=$3, comment=$4, updated_at=$5 WHERE id=$6", title, page, timeRecord, comment, date, id)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := db.ExecContext(ctx, "UPDATE records SET title=$1, page=$2, time=$3, comment=$4, file_id=$5, updated_at=$6 WHERE id=$7", title, page, timeRecord, comment, fileID, date, id)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
