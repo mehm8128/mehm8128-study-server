@@ -181,7 +181,11 @@ func putMe(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
 	}
-	if userID != me.ID {
+	userID2, err := uuid.Parse(userID.(string))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	if userID2 != me.ID {
 		return echo.NewHTTPError(http.StatusForbidden, "your id is invalid")
 	}
 	if me.Name == "" {
