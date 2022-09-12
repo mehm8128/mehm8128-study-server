@@ -25,7 +25,7 @@ type UserResponse struct {
 func CreateUser(ctx context.Context, name string, hashedPass []byte, description string) (*uuid.UUID, error) {
 	var count int
 
-	err := db.GetContext(ctx, &count, "SELECT COUNT(*) FROM users WHERE name = $1", name)
+	err := db.GetContext(ctx, &count, "SELECT COUNT(*) FROM users WHERE name = ?", name)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func CreateUser(ctx context.Context, name string, hashedPass []byte, description
 	}
 	userID := uuid.New()
 	date := time.Now()
-	_, err = db.Exec("INSERT INTO users (id, name, hashed_pass, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)", userID, name, hashedPass, description, date, date)
+	_, err = db.Exec("INSERT INTO users (id, name, hashed_pass, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", userID, name, hashedPass, description, date, date)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func CreateUser(ctx context.Context, name string, hashedPass []byte, description
 
 func GetUserByName(ctx context.Context, name string) (*User, error) {
 	var user User
-	err := db.GetContext(ctx, &user, "SELECT * FROM users WHERE name = $1", name)
+	err := db.GetContext(ctx, &user, "SELECT * FROM users WHERE name = ?", name)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func GetUsers(ctx context.Context) ([]*UserResponse, error) {
 
 func GetUser(ctx context.Context, ID uuid.UUID) (*UserResponse, error) {
 	var user UserResponse
-	err := db.GetContext(ctx, &user, "SELECT id, name, description FROM users WHERE id = $1", ID)
+	err := db.GetContext(ctx, &user, "SELECT id, name, description FROM users WHERE id = ?", ID)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func GetUser(ctx context.Context, ID uuid.UUID) (*UserResponse, error) {
 func PutMe(ctx context.Context, ID uuid.UUID, name string, description string) (*UserResponse, error) {
 	var user UserResponse
 	date := time.Now()
-	_, err := db.Exec("UPDATE users SET name = $1, description = $2, updated_at = $3 WHERE id = $4", name, description, date, ID)
+	_, err := db.Exec("UPDATE users SET name = ?, description = ?, updated_at = ? WHERE id = ?", name, description, date, ID)
 	if err != nil {
 		return nil, err
 	}

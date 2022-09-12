@@ -34,7 +34,7 @@ func GetMemorizes(ctx context.Context) ([]*MemorizeResponse, error) {
 func CreateMemorize(ctx context.Context, name string) (*MemorizeResponse, error) {
 	memorizeID := uuid.New()
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "INSERT INTO memorizes (id, name, created_at, updated_at) VALUES ($1, $2, $3, $4)", memorizeID, name, date, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO memorizes (id, name, created_at, updated_at) VALUES (?, ?, ?, ?)", memorizeID, name, date, date)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func CreateMemorize(ctx context.Context, name string) (*MemorizeResponse, error)
 
 func GetMemorize(ctx context.Context, id uuid.UUID) (*MemorizeResponse, error) {
 	var memorize MemorizeResponse
-	err := db.GetContext(ctx, &memorize, "SELECT * FROM memorizes WHERE id = $1", id)
+	err := db.GetContext(ctx, &memorize, "SELECT * FROM memorizes WHERE id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func GetMemorize(ctx context.Context, id uuid.UUID) (*MemorizeResponse, error) {
 
 func GetWords(ctx context.Context, id uuid.UUID) ([]WordResponse, error) {
 	var words []WordResponse
-	err := db.SelectContext(ctx, &words, "SELECT * FROM words WHERE memorize_id = $1", id)
+	err := db.SelectContext(ctx, &words, "SELECT * FROM words WHERE memorize_id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func GetWords(ctx context.Context, id uuid.UUID) ([]WordResponse, error) {
 func AddWord(ctx context.Context, memorizeID uuid.UUID, word string, wordJp string) (*WordResponse, error) {
 	wordID := uuid.New()
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "INSERT INTO words (id, memorize_id, word, word_jp, created_at) VALUES ($1, $2, $3, $4, $5)", wordID, memorizeID, word, wordJp, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO words (id, memorize_id, word, word_jp, created_at) VALUES (?, ?, ?, ?, ?)", wordID, memorizeID, word, wordJp, date)
 	if err != nil {
 		return nil, err
 	}

@@ -7,12 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-// type FileResponse struct {
-// 	ID        uuid.UUID `json:"id" db:"id"`
-// 	FileName  string    `json:"fileName" db:"file_name"`
-// 	CreatedBy uuid.UUID `json:"createdBy" db:"created_by"`
-// 	CreatedAt time.Time `json:"createdAt" db:"created_at"`
-// }
+//	type FileResponse struct {
+//		ID        uuid.UUID `json:"id" db:"id"`
+//		FileName  string    `json:"fileName" db:"file_name"`
+//		CreatedBy uuid.UUID `json:"createdBy" db:"created_by"`
+//		CreatedAt time.Time `json:"createdAt" db:"created_at"`
+//	}
 type FileResponse struct {
 	ID        uuid.UUID `json:"id" db:"id"`
 	FileName  string    `json:"fileName" db:"file_name"`
@@ -23,7 +23,7 @@ type FileResponse struct {
 
 // func CreateFile(ctx context.Context, fileID uuid.UUID, fileName string, createdBy uuid.UUID) (*FileResponse, error) {
 // 	date := time.Now()
-// 	_, err := db.ExecContext(ctx, "INSERT INTO files (id, file_name, created_by, created_at) VALUES ($1, $2, $3, $4)", fileID, fileName, createdBy, date)
+// 	_, err := db.ExecContext(ctx, "INSERT INTO files (id, file_name, created_by, created_at) VALUES (?, ?, ?, ?)", fileID, fileName, createdBy, date)
 // 	if err != nil {
 // 		return nil, err
 // 	}
@@ -39,7 +39,7 @@ type FileResponse struct {
 func CreateFile(ctx context.Context, fileName string, file string, createdBy uuid.UUID) (*FileResponse, error) {
 	fileID := uuid.New()
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "INSERT INTO files (id, file_name, file, created_by, created_at) VALUES ($1, $2, $3, $4, $5)", fileID, fileName, file, createdBy, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO files (id, file_name, file, created_by, created_at) VALUES (?, ?, ?, ?, ?)", fileID, fileName, file, createdBy, date)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func CreateFile(ctx context.Context, fileName string, file string, createdBy uui
 
 func GetFile(ctx context.Context, id uuid.UUID) (*FileResponse, error) {
 	var file FileResponse
-	err := db.GetContext(ctx, &file, "SELECT * FROM files WHERE id = $1", id)
+	err := db.GetContext(ctx, &file, "SELECT * FROM files WHERE id = ?", id)
 	if err != nil {
 		return nil, err
 	}

@@ -2,23 +2,17 @@ package router
 
 import (
 	"net/http"
-	"os"
 	"time"
 
-	"github.com/antonlindstrom/pgstore"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/srinathgs/mysqlstore"
 )
 
-func SetRouting() {
-	port := os.Getenv("PORT")
-	//port := "8000"
-	//store, err := pgstore.NewPGStore("user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable", []byte("sessions"))
-	store, err := pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte("sessions"))
-	if err != nil {
-		panic(err)
-	}
+func SetRouting(store *mysqlstore.MySQLStore) {
+	//port := os.Getenv("PORT")
+	port := "8000"
 
 	e := echo.New()
 	e.Use(middleware.Logger())
@@ -28,6 +22,7 @@ func SetRouting() {
 		AllowOrigins:     []string{"*"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
+		AllowMethods:     []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 	defer store.Close()
 	defer store.StopCleanup(store.Cleanup(time.Minute * 5))
