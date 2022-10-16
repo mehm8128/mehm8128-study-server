@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   `file_name` varchar(36) NOT NULL,
   `created_by` char(36) NOT NULL,
   `created_at` datetime NOT NULL,
-  `file` blob,
+  -- `file` blob,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

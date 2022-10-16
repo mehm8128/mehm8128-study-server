@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -29,6 +30,10 @@ func SetRouting(store *mysqlstore.MySQLStore) {
 	}))
 	defer store.Close()
 	defer store.StopCleanup(store.Cleanup(time.Minute * 5))
+
+	if err := os.Mkdir("files", 0777); err != nil {
+		fmt.Println(err)
+	}
 
 	api := e.Group("/api")
 	{
