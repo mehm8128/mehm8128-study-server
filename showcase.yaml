@@ -8,6 +8,4 @@ http_proxy: 8000
 
 https: on
 
-cname: mehm8128_study.mehm8218.trap.show
-
 use_mariadb: true
