@@ -14,4 +14,4 @@ branch:
   master:
     cname: mehm8128.trap.show
   replace-postgresql-with-mariadb:
-    cname: replace.mehm8128.trap.show
+    cname: replace-db.mehm8128.trap.show
