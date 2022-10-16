@@ -13,5 +13,3 @@ use_mariadb: true
 branch:
   master:
     cname: mehm8128.trap.show
-  replace-postgresql-with-mariadb:
-    cname: replace-db.mehm8128.trap.show
