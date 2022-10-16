@@ -1,4 +1,4 @@
-type: runtime
+type: "runtime"
 
 startup: |
   go mod download
