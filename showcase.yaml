@@ -8,8 +8,6 @@ http_proxy: 8000
 
 https: on
 
-cname: mehm8128.trap.show
-
 use_mariadb: true
 
 branch:
