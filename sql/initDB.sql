@@ -5,7 +5,7 @@ USE mehm8128_study;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` char(36) NOT NULL UNIQUE,
   `name` varchar(20) NOT NULL,
-  `hashed_pass` varchar(200) NOT NULL UNIQUE,
+  `hashed_pass` varchar(200) NOT NULL,
   `description` varchar(140) DEFAULT '',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NUll,
