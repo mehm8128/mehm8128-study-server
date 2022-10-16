@@ -1,0 +1,19 @@
+type: runtime
+
+startup: |
+  go mod download
+  go build -o main
+entrypoint: ./main
+http_proxy: 8000
+
+https: on
+
+cname: mehm8128.trap.show
+
+use_mariadb: true
+
+branch:
+  master:
+    cname: mehm8128.trap.show
+  replace-postgresql-with-mariadb:
+    cname: replace.mehm8128.trap.show

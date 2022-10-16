@@ -2,8 +2,6 @@ module mehm8128_study_server
 
 go 1.18
 
-// +heroku goVersion go1.18
-
 require (
 	github.com/google/uuid v1.3.0
 	github.com/jmoiron/sqlx v1.3.5

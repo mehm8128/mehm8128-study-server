@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/labstack/echo-contrib/session"
@@ -11,8 +12,10 @@ import (
 )
 
 func SetRouting(store *mysqlstore.MySQLStore) {
-	//port := os.Getenv("PORT")
-	port := "8000"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
 
 	e := echo.New()
 	e.Use(middleware.Logger())
