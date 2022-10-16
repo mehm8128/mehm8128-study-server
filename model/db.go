@@ -32,7 +32,7 @@ func InitDB() (*sqlx.DB, error) {
 	if dbname == "" {
 		dbname = "study_app"
 	}
-	_db, err := sqlx.Open("mariadb", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Asia", user, pass, host, dbname))
+	_db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Asia", user, pass, host, dbname))
 	if err != nil {
 		return nil, err
 	}
