@@ -33,7 +33,7 @@ func CreateGoal(ctx context.Context, title string, comment string, goalDate stri
 	goalID := uuid.New()
 	date := time.Now()
 	var favorites []GoalFavoriteResponse
-	_, err := db.ExecContext(ctx, "INSERT INTO goals (id, title, comment, goal_date, favorite_num, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", goalID, title, comment, goalDate, 0, createdBy, date, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO goals (id, title, comment, goal_date, favorite_num, created_by, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", goalID, title, comment, goalDate, 0, createdBy, date, date)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func CreateGoal(ctx context.Context, title string, comment string, goalDate stri
 
 func GetGoal(ctx context.Context, id uuid.UUID) (*GoalResponse, error) {
 	var goal GoalResponse
-	err := db.GetContext(ctx, &goal, "SELECT * FROM goals WHERE id = $1", id)
+	err := db.GetContext(ctx, &goal, "SELECT * FROM goals WHERE id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func GetGoal(ctx context.Context, id uuid.UUID) (*GoalResponse, error) {
 
 func PutGoal(ctx context.Context, id uuid.UUID, title string, comment string, goalDate string, isCompleted bool) error {
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "UPDATE goals SET title=$1, comment=$2, goal_date=$3, is_completed=$4, updated_at=$5 WHERE id=$6", title, comment, goalDate, isCompleted, date, id)
+	_, err := db.ExecContext(ctx, "UPDATE goals SET title=?, comment=?, goal_date=?, is_completed=?, updated_at=? WHERE id=?", title, comment, goalDate, isCompleted, date, id)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func PutGoal(ctx context.Context, id uuid.UUID, title string, comment string, go
 }
 
 func DeleteGoal(ctx context.Context, id uuid.UUID) error {
-	_, err := db.ExecContext(ctx, "DELETE FROM goals WHERE id=$1", id)
+	_, err := db.ExecContext(ctx, "DELETE FROM goals WHERE id=?", id)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func DeleteGoal(ctx context.Context, id uuid.UUID) error {
 
 func GetGoalsByUser(ctx context.Context, id uuid.UUID) ([]*GoalResponse, error) {
 	var goals []*GoalResponse
-	err := db.SelectContext(ctx, &goals, "SELECT * FROM goals WHERE created_by = $1 ORDER BY created_at DESC", id)
+	err := db.SelectContext(ctx, &goals, "SELECT * FROM goals WHERE created_by = ? ORDER BY created_at DESC", id)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func GetGoalsByUser(ctx context.Context, id uuid.UUID) ([]*GoalResponse, error) 
 func PutGoalFavorite(ctx context.Context, id uuid.UUID, createdBy uuid.UUID) (*GoalFavoriteResponse, error) {
 	favoriteID := uuid.New()
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "INSERT INTO goal_favorites (id, goal_id, created_by, created_at) VALUES ($1, $2, $3, $4)", favoriteID, id, createdBy, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO goal_favorites (id, goal_id, created_by, created_at) VALUES (?, ?, ?, ?)", favoriteID, id, createdBy, date)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func PutGoalFavorite(ctx context.Context, id uuid.UUID, createdBy uuid.UUID) (*G
 	if err != nil {
 		return nil, err
 	}
-	_, err = db.ExecContext(ctx, "UPDATE goals SET favorite_num=$1, updated_at=$2 WHERE id=$3", goal.FavoriteNum+1, date, id)
+	_, err = db.ExecContext(ctx, "UPDATE goals SET favorite_num=?, updated_at=? WHERE id=?", goal.FavoriteNum+1, date, id)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func PutGoalFavorite(ctx context.Context, id uuid.UUID, createdBy uuid.UUID) (*G
 
 func CompleteGoal(ctx context.Context, id uuid.UUID) error {
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "UPDATE goals SET is_completed=$1, updated_at=$2 WHERE id=$3", true, date, id)
+	_, err := db.ExecContext(ctx, "UPDATE goals SET is_completed=?, updated_at=? WHERE id=?", true, date, id)
 	if err != nil {
 		return err
 	}

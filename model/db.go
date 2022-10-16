@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/jmoiron/sqlx"
@@ -12,8 +13,26 @@ var (
 )
 
 func InitDB() (*sqlx.DB, error) {
-	//_db, err := sqlx.Open("postgres", "user=mehm8128 password=math8128 dbname=mehm8128_study sslmode=disable")
-	_db, err := sqlx.Open("postgres", os.Getenv("DATABASE_URL"))
+	user := os.Getenv("MARIADB_USERNAME")
+	if user == "" {
+		user = "mehm8128"
+	}
+
+	pass := os.Getenv("MARIADB_PASSWORD")
+	if pass == "" {
+		pass = "math8128"
+	}
+
+	host := os.Getenv("MARIADB_HOSTNAME")
+	if host == "" {
+		host = "localhost"
+	}
+
+	dbname := os.Getenv("MARIADB_DATABASE")
+	if dbname == "" {
+		dbname = "mehm8128_study"
+	}
+	_db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, pass, host, dbname))
 	if err != nil {
 		return nil, err
 	}

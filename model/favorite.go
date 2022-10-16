@@ -22,7 +22,7 @@ type GoalFavoriteResponse struct {
 
 func GetRecordFavorites(ctx context.Context, id uuid.UUID) ([]RecordFavoriteResponse, error) {
 	var favorites []RecordFavoriteResponse
-	err := db.SelectContext(ctx, &favorites, "SELECT * FROM record_favorites WHERE record_id = $1", id)
+	err := db.SelectContext(ctx, &favorites, "SELECT * FROM record_favorites WHERE record_id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func GetRecordFavorites(ctx context.Context, id uuid.UUID) ([]RecordFavoriteResp
 
 func GetGoalFavorites(ctx context.Context, id uuid.UUID) ([]GoalFavoriteResponse, error) {
 	var favorites []GoalFavoriteResponse
-	err := db.SelectContext(ctx, &favorites, "SELECT * FROM goal_favorites WHERE goal_id = $1", id)
+	err := db.SelectContext(ctx, &favorites, "SELECT * FROM goal_favorites WHERE goal_id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func GetGoalFavorites(ctx context.Context, id uuid.UUID) ([]GoalFavoriteResponse
 }
 
 func DeleteRecordFavorites(ctx context.Context, id uuid.UUID) error {
-	_, err := db.ExecContext(ctx, "DELETE FROM record_favorites WHERE record_id = $1", id)
+	_, err := db.ExecContext(ctx, "DELETE FROM record_favorites WHERE record_id = ?", id)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func DeleteRecordFavorites(ctx context.Context, id uuid.UUID) error {
 }
 
 func DeleteGoalFavorites(ctx context.Context, id uuid.UUID) error {
-	_, err := db.ExecContext(ctx, "DELETE FROM goal_favorites WHERE goal_id = $1", id)
+	_, err := db.ExecContext(ctx, "DELETE FROM goal_favorites WHERE goal_id = ?", id)
 	if err != nil {
 		return err
 	}

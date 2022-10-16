@@ -36,12 +36,12 @@ func CreateRecord(ctx context.Context, title string, page int, timeRecord int, c
 	var favorites []RecordFavoriteResponse
 
 	if fileID == uuid.Nil {
-		_, err := db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", recordID, title, page, timeRecord, comment, 0, createdBy, date, date)
+		_, err := db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, created_by, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", recordID, title, page, timeRecord, comment, 0, createdBy, date, date)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		_, err := db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, file_id, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", recordID, title, page, timeRecord, comment, 0, fileID, createdBy, date, date)
+		_, err := db.ExecContext(ctx, "INSERT INTO records (id, title, page, time, comment, favorite_num, file_id, created_by, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", recordID, title, page, timeRecord, comment, 0, fileID, createdBy, date, date)
 		if err != nil {
 			return nil, err
 		}
@@ -64,7 +64,7 @@ func CreateRecord(ctx context.Context, title string, page int, timeRecord int, c
 
 func GetRecord(ctx context.Context, id uuid.UUID) (*RecordResponse, error) {
 	var record RecordResponse
-	err := db.GetContext(ctx, &record, "SELECT * FROM records WHERE id = $1", id)
+	err := db.GetContext(ctx, &record, "SELECT * FROM records WHERE id = ?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -74,12 +74,12 @@ func GetRecord(ctx context.Context, id uuid.UUID) (*RecordResponse, error) {
 func PutRecord(ctx context.Context, id uuid.UUID, title string, page int, timeRecord int, comment string, fileID uuid.UUID) error {
 	date := time.Now()
 	if fileID == uuid.Nil {
-		_, err := db.ExecContext(ctx, "UPDATE records SET title=$1, page=$2, time=$3, comment=$4, updated_at=$5 WHERE id=$6", title, page, timeRecord, comment, date, id)
+		_, err := db.ExecContext(ctx, "UPDATE records SET title=?, page=?, time=?, comment=?, updated_at=? WHERE id=?", title, page, timeRecord, comment, date, id)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err := db.ExecContext(ctx, "UPDATE records SET title=$1, page=$2, time=$3, comment=$4, file_id=$5, updated_at=$6 WHERE id=$7", title, page, timeRecord, comment, fileID, date, id)
+		_, err := db.ExecContext(ctx, "UPDATE records SET title=?, page=?, time=?, comment=?, file_id=?, updated_at=? WHERE id=?", title, page, timeRecord, comment, fileID, date, id)
 		if err != nil {
 			return err
 		}
@@ -88,7 +88,7 @@ func PutRecord(ctx context.Context, id uuid.UUID, title string, page int, timeRe
 }
 
 func DeleteRecord(ctx context.Context, id uuid.UUID) error {
-	_, err := db.ExecContext(ctx, "DELETE FROM records WHERE id=$1", id)
+	_, err := db.ExecContext(ctx, "DELETE FROM records WHERE id=?", id)
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func DeleteRecord(ctx context.Context, id uuid.UUID) error {
 
 func GetRecordsByUser(ctx context.Context, id uuid.UUID) ([]*RecordResponse, error) {
 	var records []*RecordResponse
-	err := db.SelectContext(ctx, &records, "SELECT * FROM records WHERE created_by = $1 ORDER BY created_at DESC", id)
+	err := db.SelectContext(ctx, &records, "SELECT * FROM records WHERE created_by = ? ORDER BY created_at DESC", id)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func GetRecordsByUser(ctx context.Context, id uuid.UUID) ([]*RecordResponse, err
 func PutRecordFavorite(ctx context.Context, id uuid.UUID, createdBy uuid.UUID) (*RecordFavoriteResponse, error) {
 	favoriteID := uuid.New()
 	date := time.Now()
-	_, err := db.ExecContext(ctx, "INSERT INTO record_favorites (id, record_id, created_by, created_at) VALUES ($1, $2, $3, $4)", favoriteID, id, createdBy, date)
+	_, err := db.ExecContext(ctx, "INSERT INTO record_favorites (id, record_id, created_by, created_at) VALUES (?, ?, ?, ?)", favoriteID, id, createdBy, date)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func PutRecordFavorite(ctx context.Context, id uuid.UUID, createdBy uuid.UUID) (
 	if err != nil {
 		return nil, err
 	}
-	_, err = db.ExecContext(ctx, "UPDATE records SET favorite_num=$1, updated_at=$2 WHERE id=$3", record.FavoriteNum+1, date, id)
+	_, err = db.ExecContext(ctx, "UPDATE records SET favorite_num=?, updated_at=? WHERE id=?", record.FavoriteNum+1, date, id)
 	if err != nil {
 		return nil, err
 	}
